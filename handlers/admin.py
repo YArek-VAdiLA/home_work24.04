@@ -3,8 +3,8 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher.filters.state import State, StatesGroup
 import datetime
-import main as m
-from key_bord import kb_day,kb_cancel
+import serch_day as m
+from keyboards import kb_day,kb_cancel
 
 class FSMAdmin(StatesGroup):
    data= State()
@@ -40,9 +40,13 @@ async def cancel(message: types.Message, state: FSMContext):
     await state.finish()
     await message.reply("OK", reply_markup=kb_day)
 
+
+
+
+
 def register_hendlers(dp:Dispatcher):
+    dp.register_message_handler(send_welcome, commands=['/start'], state=None)
     dp.register_message_handler(cancel, commands=['cancel'], state='*')
     dp.register_message_handler(cancel, Text(equals='cancel', ignore_case=True), state='*')
     dp.register_message_handler(Data,lambda message: message.text.startswith("day week"))
     dp.register_message_handler(date,state=FSMAdmin.data)
-    dp.register_message_handler(send_welcome, commands=['/start'])
